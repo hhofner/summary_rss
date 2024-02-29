@@ -1,0 +1,14 @@
+<div class="space-y-8">
+  <h1 class="md:text-7xl text-4xl text-center">RSS Feeds of video summaries</h1>
+  <p class="text-center">
+    Save time by reading concise summaries instead of watching full videos.
+  </p>
+  <.form for={@form} phx-submit="find">
+    <.input
+      field={@form[:url]}
+      placeholder="Enter YouTube handle that starts with '@'"
+      autocomplete="off"
+      phx-debounce="blur"
+    />
+  </.form>
+</div>
