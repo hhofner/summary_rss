@@ -4,64 +4,45 @@ defmodule SummaryRss.Youtube do
   # 2. get the last 20 videos of a youtube channel
   # 3. get the transcriptions of a youtube video
   @channels_url "https://youtube.googleapis.com/youtube/v3/channels"
-  @videos_url "https://youtube.googleapis.com/youtube/v3/videos"
-  @captions_url "https://youtube.googleapis.com/youtube/v3/captions"
+  @search_url "https://youtube.googleapis.com/youtube/v3/search"
 
   def get_channel_id(handle) do
-    url_with_params =
-      @channels_url <>
-        "?part=snippet&forHandle=" <> handle <> "&key=" <> System.get_env("YOUTUBE_API_KEY")
-
     case HTTPoison.get(
-           url_with_params,
-           [{"Accept", "application/json"}]
+           @channels_url,
+           [],
+           params: %{
+             part: "snippet",
+             forHandle: handle,
+             key: System.get_env("YOUTUBE_API_KEY")
+           }
          ) do
       {:ok, response} ->
         items = response.body |> Jason.decode!() |> Map.get("items")
         items |> List.first() |> Map.get("id")
 
-      {:error, error} ->
+      {:error, _error} ->
         "error"
     end
   end
 
   def get_channel_videos(channel_id) do
-    url_with_params =
-      @videos_url <>
-        "?part=snippet%2CcontentDetails&id=" <>
-        channel_id <> "&maxResults=20&key=" <> System.get_env("YOUTUBE_API_KEY")
-
     case HTTPoison.get(
-           url_with_params,
-           [{"Accept", "application/json"}]
+           @search_url,
+           [],
+           params: %{
+             part: "snippet",
+             maxResults: 10,
+             key: System.get_env("YOUTUBE_API_KEY"),
+             channelId: channel_id
+           }
          ) do
       {:ok, response} ->
+        IO.inspect(response)
         items = response.body |> Jason.decode!() |> Map.get("items")
-        items
+        Enum.map(items, fn item -> Map.get(item, "id") end)
 
       {:error, error} ->
         "error"
     end
-  end
-
-  def get_video_captions(video_id) do
-    url_with_params =
-      @captions_url <>
-        "?part=snippet&videoId=" <> video_id <> "&key=" <> System.get_env("YOUTUBE_API_KEY")
-
-    case HTTPoison.get(
-           url_with_params,
-           [{"Accept", "application/json"}]
-         ) do
-      {:ok, response} ->
-        items = response.body |> Jason.decode!() |> Map.get("items")
-        items
-
-      {:error, error} ->
-        "error"
-    end
-  end
-
-  def download_video_caption() do
   end
 end

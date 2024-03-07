@@ -26,6 +26,10 @@ config :summary_rss, SummaryRssWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
+config :openai,
+  # find it at https://platform.openai.com/account/api-keys
+  api_key: System.get_env("OPENAI_API_KEY")
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

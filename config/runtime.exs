@@ -18,6 +18,9 @@ import Config
 # script that automatically sets the env var above.
 if System.get_env("PHX_SERVER") do
   config :summary_rss, SummaryRssWeb.Endpoint, server: true
+
+  config :openai,
+    api_key: System.get_env("OPENAI_API_KEY")
 end
 
 if config_env() == :prod do
@@ -111,3 +114,7 @@ if config_env() == :prod do
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end
+
+config :openai,
+  # find it at https://platform.openai.com/account/api-keys
+  api_key: System.get_env("OPENAI_API_KEY")

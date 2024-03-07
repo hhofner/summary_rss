@@ -52,7 +52,9 @@ defmodule SummaryRss.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
       {:httpoison, "~> 2.0"},
-      {:openai, "~> 0.6.1"}
+      {:openai, "~> 0.6.1"},
+      {:youtube_captions, "~> 0.1.0"},
+      {:fast_rss, "~> 0.5.0"}
     ]
   end
 
